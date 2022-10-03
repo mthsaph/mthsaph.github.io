@@ -1,6 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 * {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
+	font-family: 'Roboto', sans-serif;
+	color: white;
+}
 
+.bigbox {
+	width: 250px;
+	height: 250px;
+	background-color: lightgray;
+}
+
+body {
+	max-width: 1100px;
+	background-color: black;
+}
+
+.navbar, .container, .title {
+	display: flex;
+	background-color: #1F2937;
+	color: white;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.container .title{
+	font-size: 48px;
+	font-weight: extra-bold;
+}
+
+.container {
+	height: 400px;
+	ustify-content: center;
+	align-items: center;
+}
+
+.navbar {
+	justify-content: space-between;
+}
+
+ul {
+	list-style: none;
+	display: flex;
+	gap: 10px;
+}
+
+a {
+	text-decoration: none;
+	color: white;
+}
+
+img {
+	width: 250px;
+	height: 250px;
+}
+
+button {
+	padding: 5px 15px;
+	background-color: #3882F6;
+	border-radius: 7px;
+	border: 0;
+	color: white;
+	font-weight: bold;
+}
+
+.cardscontainer {
+
+	display: flex;
+	color: red;
+	background-color: white;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 400px;
+}
+
+.cards {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	text-align: center;
+}
+
+.box {
+	width: 100px;
+	height: 100px;
+	border: 3px solid #3882F6;
+	background-color: white;
+	border-radius: 7px;
+	display: flex;
+	justify-content: center;
+	align-content: center;
 }
