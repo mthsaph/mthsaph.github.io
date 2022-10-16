@@ -14,12 +14,6 @@
 	background-color: #3882F6;
 }
 
-body {
-	background-color: black;
-	display: flex;
-	flex-direction: column;
-}
-
 .navbar, .container, .title {
 	display: flex;
 	background-color: #1F2937;
@@ -34,7 +28,7 @@ body {
 }
 
 .container {
-	justify-content: space-between;
+	justify-content: space-around;
 	align-items: center;
 }
 
@@ -67,7 +61,7 @@ button {
 	font-weight: bold;
 }
 
-.cardscontainer {
+.cardscontainer, .quote {
 	display: flex;
 	background-color: white;
 	flex-direction: column;
@@ -107,4 +101,45 @@ button {
 	background-color: white;
 	border-radius: 7px;
 	display: flex;
+}
+
+.quote {
+	background-color: #E5E7EB;
+}
+
+.phrase, .author {
+	color: #1F2937;
+	font-size: 36px;
+	font-style: italic;
+	font-weight: lighter;
+}
+
+.author {
+	align-self: flex-end;
+}
+
+.containerfoot {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: white;
+	padding: 80px;
+}
+
+
+.content {
+	background-color: #3882F6;
+	display: flex;
+	align-items: center;
+	padding: 20px 60px;
+	border-radius: 7px;
+	column-gap: 40px;
+}
+
+.content button {
+	border: 2px solid white;
+}
+
+.call {
+	font-weight: 1000;
 }
