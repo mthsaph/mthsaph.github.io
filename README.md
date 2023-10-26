@@ -1,2 +1,2 @@
-# odin-project-landing-page
-Odin`s Project Landind Page by Pendragon
+# dreadfulcreation-project-landing-page
+Odin`s Project Landind Page by dreadfulcreation
