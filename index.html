@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PJeOffice Pro - Etiquetas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="pjeoffice-pro.js"></script>
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar-custom {
+            background-color: #00295f;
+            color: #FFFFFF;
+            padding: 15px 0;
+        }
+        .card-container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #00295f;
+        }
+        .btn-custom {
+            background-color: #00295f;
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            background-color: #001f40;
+            transform: translateY(-2px);
+        }
+        .textarea-custom {
+            resize: vertical;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .card-container {
+                margin: 15px;
+                padding: 20px;
+            }
+        }
+    </style>
+<script>
+    const printerPort = "LPT1";
+    const apiContext = {
+      "argument": {
+          "REQUEST_TIMEOUT" : 600000,            //Opcional: se não informado será considerado PJEOFFICE_DEFAULT_ARGUMENTS.REQUEST_TIMEOUT   
+      },
+      "onSuccess": function(data) {
+          alert('Legal, deu tudo certo!');
+      },
+      "onFailed": function(statusText) {
+          alert('Infelizmente não foi possível finalizar a ação!');
+      },    
+      "onUnavailable": function(statusText) {
+          alert('Favor abrir o PJEOfficePro!');
+      }
+   };
+
+  function removeAcentosECedilha(str) {
+      // Primeiro, normalize a string para separar caracteres base de seus acentos
+      return str
+          // Normaliza para a forma NFD (decompõe caracteres em caracteres base + marcas de combinação)
+          .normalize('NFD')
+          // Substitui o 'ç' e 'Ç' por 'c' e 'C' antes de remover acentos
+          .replace(/[çÇ]/g, match => match === 'ç' ? 'c' : 'C')
+          // Remove todos os acentos/marcas diacríticas
+          .replace(/[\u0300-\u036f]/g, '')
+  }
+
+
+  function dividirNoPrimeiroEspaco(texto) {
+      // Primeiro, remove espaços em branco consecutivos em todo o texto
+      const textoNormalizado = texto.replace(/\s+/g, ' ');
+      
+      // Encontra o índice do primeiro espaço
+      const indiceEspaco = textoNormalizado.indexOf(' ');
+      
+      // Se não houver espaço, retorna o texto normalizado como primeira entrada e string vazia como segunda
+      if (indiceEspaco === -1) {
+          return [textoNormalizado, ''];
+      }
+      
+      // Divide o texto em duas partes
+      const primeiraParte = textoNormalizado.substring(0, indiceEspaco);
+      const segundaParte = textoNormalizado.substring(indiceEspaco + 1);
+      
+      // Retorna as duas partes como um array
+      return [primeiraParte, segundaParte];
+  }
+
+
+  
+</script>
+</head>
+<body>
+    <div class="container">
+        <div class="card-container">
+
+            <div class = "text-center form-label">JFMS</div>
+            <div class="logo-container">
+                <img src="jf.png" width="64" height="80" alt="Logo JF">
+            </div>
+
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="descricao" placeholder="Digite a descrição do item">
+            </div>
+
+            <div class="mb-3">
+                <label for="patrimonio" class="form-label">Número</label>
+                <input type="text" class="form-control" id="patrimonio" placeholder="Digite apenas números">
+            </div>
+
+            <button id="meuBotao" class="btn btn-custom w-100 mb-4">
+                IMPRIMIR ETIQUETA
+            </button>
+
+            <div class="mb-3">
+                <label class="form-label">Impressão em Lote (Copiar e Colar de Planilha)</label>
+                <textarea id="massData" class="form-control textarea-custom" rows="7" placeholder="Cole os dados da planilha aqui"></textarea>
+            </div>
+
+            <button id="meuBotaoMassPrint" class="btn btn-custom w-100">
+                IMPRIMIR ETIQUETAS EM LOTE
+            </button>
+        </div>
+    </div>
+    <script>
+    document.getElementById("meuBotao").addEventListener("click", function() {        
+        const valorDescricao = removeAcentosECedilha(document.getElementById("descricao").value).trim();
+        const num = document.getElementById("patrimonio").value;
+        const valorPatrimonio = num.replace(/[^0-9]/g, '');
+
+        if (valorPatrimonio != num){
+            alert("RAIOS E TROVÔES!!! NÃO HÁ SOMENTES NÚMEROS");
+            return;
+        }
+        if (Number(valorPatrimonio) >= 100000000){
+            alert("O GRANDE SENHOR DA MONTANHA NÃO PERMITE NÚMEROS MAIORES QUE 99999999!!!!");
+            return;
+        }
+        if (valorDescricao == "" || valorPatrimonio == ""){
+            alert("O PRÍNCIPE DAS TREVAS NÃO SE ALEGRA COM CAMPOS EM BRANCO!!!");
+            return;
+        }
+
+        const max = Math.min(valorDescricao.length, 26);
+        const descricaoAcima = valorDescricao.substring(0, max).trim();
+        const nvalorDescricao = valorDescricao.substring(max).trim();
+        const descricaoAbaixo = nvalorDescricao.substring(0, Math.min(nvalorDescricao.length, 26)).trim();
+
+        console.log(descricaoAcima, descricaoAbaixo)
+
+        const msg = "^XA ^LL240 ^FO10,30^A0N,40,60^FD" + valorPatrimonio + "^FS ^FO432,30^A0N,40,60^FD" + valorPatrimonio + "^FS ^FO10,80^BY3,3,80^BCN,,N,N,N^FD" + valorPatrimonio + "^FS ^FO432,80^BY3,3,80^BCN,,N,N,N^FD" + valorPatrimonio + "^FS ^FO10,170^A0N,25,28^FD" + descricaoAcima + "^FS ^FO10,200^A0N,25,28^FD" + descricaoAbaixo + "^FS ^FO432,170^A0N,25,28^FD" + descricaoAcima + "^FS ^FO432,200^A0N,25,28^FD" + descricaoAbaixo + "^FS ^XZ";
+        PjeOffice.printTag(printerPort, [msg], apiContext);
+    });
+
+    document.getElementById("meuBotaoMassPrint").addEventListener("click", function() {// MASS PRINT   
+        let content = [];     
+        const valor = removeAcentosECedilha(document.getElementById("massData").value).trim();
+        const L = valor.split("\n");
+        const L2 = L.map(v => v.replace(/[\t\n\r]/g, ' ').trim());
+        const L3 = L2.map(i => dividirNoPrimeiroEspaco(i));
+        const L4 = L3.map(v => [v[0].trim(), v[1].trim()])
+        for(let i = 0; i < L4.length; i++){
+            const valorPatrimonio = L4[i][0];
+            const valorDescricao = L4[i][1];
+            const max = Math.min(valorDescricao.length, 26);
+            const descricaoAcima = valorDescricao.substring(0, max).trim();
+            const nvalorDescricao = valorDescricao.substring(max).trim();
+            const descricaoAbaixo = nvalorDescricao.substring(0, Math.min(nvalorDescricao.length, 26)).trim();
+
+            const msg = "^XA ^LL240 ^FO10,30^A0N,40,60^FD" + valorPatrimonio + "^FS ^FO432,30^A0N,40,60^FD" + valorPatrimonio + "^FS ^FO10,80^BY3,3,80^BCN,,N,N,N^FD" + valorPatrimonio + "^FS ^FO432,80^BY3,3,80^BCN,,N,N,N^FD" + valorPatrimonio + "^FS ^FO10,170^A0N,25,28^FD" + descricaoAcima + "^FS ^FO10,200^A0N,25,28^FD" + descricaoAbaixo + "^FS ^FO432,170^A0N,25,28^FD" + descricaoAcima + "^FS ^FO432,200^A0N,25,28^FD" + descricaoAbaixo + "^FS ^XZ";
+            console.log(msg)
+            content.push(msg);
+
+
+        }
+
+        PjeOffice.printTag(printerPort, content, apiContext);
+    });
+    </script>
+</body>
+</html>
