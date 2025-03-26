@@ -52,6 +52,89 @@
                 padding: 20px;
             }
         }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #print-area, #print-area * {
+                visibility: visible;
+            }
+            #print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #label-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .label {
+            width: 188.976px; /* 5 cm em pixels (96 DPI) */
+            height: 120.472px; /* 3.2 cm em pixels (96 DPI) */
+            border: 1px solid black;
+            margin: 0 56.693px; /* 1.5 cm de espaço entre etiquetas */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #text-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        #barcode-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .barcode {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .bar {
+            background-color: black;
+            height: 40px;
+            margin: 0 1px;
+        }
+
+        .label-top {
+            font-size: 20px;
+            font-weight: 900;
+            align-self: flex-start;
+        }
+
+        .label-bot{
+            font-size: 12px;
+            font-weight: bolder;
+            align-self: flex-start;
+        }
+
+        #print-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
     </style>
 <script>
     const printerPort = "LPT1";
@@ -116,13 +199,30 @@
             </div>
 
             <div class="mb-3">
-                <label for="descricao" class="form-label">Descrição</label>
-                <input type="text" class="form-control" id="descricao" placeholder="Digite a descrição do item">
+                <label for="patrimonio" class="form-label">Número</label>
+                <input type="text" class="form-control" id="patrimonio" maxlength="8" placeholder="Digite apenas números">
             </div>
 
             <div class="mb-3">
-                <label for="patrimonio" class="form-label">Número</label>
-                <input type="text" class="form-control" id="patrimonio" placeholder="Digite apenas números">
+                <label for="descricao" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="descricao" maxlength="52" placeholder="Digite a descrição do item">
+            </div>
+
+            <div class = "mb-4">
+            <div id="print-area">
+                <div id="label-container">
+                    <div id="label1" class="label">
+                        <div id="label-text1" class="label-top"></div>
+                        <div id="barcode1" class="barcode"></div>
+                        <div id="description-text1" class="label-bot"></div>
+                    </div>
+                    <div id="label2" class="label">
+                        <div id="label-text2" class="label-top"></div>
+                        <div id="barcode2" class="barcode"></div>
+                        <div id="description-text2" class="label-bot"></div>
+                    </div>
+                </div>
+            </div>
             </div>
 
             <button id="meuBotao" class="btn btn-custom w-100 mb-4">
@@ -131,7 +231,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Impressão em Lote (Copiar e Colar de Planilha)</label>
-                <textarea id="massData" class="form-control textarea-custom" rows="7" placeholder="Cole os dados da planilha aqui&#10;Formato:&#10;[NÚMERO] [DESCRIÇÃO]&#10;Exemplo:&#10;1234 ABCDE"></textarea>
+                <textarea id="massData" class="form-control textarea-custom" rows="7" placeholder="Cole os dados da planilha aqui.&#10;Formato:&#10;[NÚMERO] [DESCRIÇÃO]&#10;Exemplo:&#10;1234 ABCDE"></textarea>
             </div>
 
             <button id="meuBotaoMassPrint" class="btn btn-custom w-100">
@@ -145,16 +245,8 @@
         const num = document.getElementById("patrimonio").value;
         const valorPatrimonio = num.replace(/[^0-9]/g, '');
 
-        if (valorPatrimonio != num){
-            alert("RAIOS E TROVÔES!!! NÃO HÁ SOMENTES NÚMEROS");
-            return;
-        }
-        if (Number(valorPatrimonio) >= 100000000){
-            alert("O GRANDE SENHOR DA MONTANHA NÃO PERMITE NÚMEROS MAIORES QUE 99999999!!!!");
-            return;
-        }
         if (valorDescricao == "" || valorPatrimonio == ""){
-            alert("O PRÍNCIPE DAS TREVAS NÃO SE ALEGRA COM CAMPOS EM BRANCO!!!");
+            alert("LORDE ELRIC, SENHOR DOS DRAGÕES, PRÍNCIPE DA CIDADE QUE SONHA, USUÁRIO DA PORTADORA DA TORMENTA NÃO SE ALEGRA COM CAMPOS EM BRANCO!!!");
             return;
         }
 
@@ -193,6 +285,65 @@
 
         PjeOffice.printTag(printerPort, content, apiContext);
     });
+
+        const input = document.getElementById('patrimonio');
+        const barcode1 = document.getElementById('barcode1');
+        const barcode2 = document.getElementById('barcode2');
+        const labelText1 = document.getElementById('label-text1');
+        const labelText2 = document.getElementById('label-text2');
+        const descriptionText1 = document.getElementById('description-text1');
+        const descriptionText2 = document.getElementById('description-text2');
+        const valorDescricao = document.getElementById("descricao")        
+
+        input.addEventListener('input', generateLabels);
+        valorDescricao.addEventListener('input', generateDisc);
+        function generateLabels() {
+            // Limpa os códigos de barras anteriores
+            barcode1.innerHTML = '';
+            barcode2.innerHTML = '';
+            
+            // Obtém o texto digitado
+            const text = input.value;
+            
+            // Exibe o texto das etiquetas
+            labelText1.textContent = text || '';
+            labelText2.textContent = text || '';
+
+            // Se não houver texto, não gera código de barras
+            if (!text) return;
+
+            // Gera código de barras para ambas as etiquetas
+            generateBarcodeForContainer(text, barcode1);
+            generateBarcodeForContainer(text, barcode2);
+        }
+
+        function generateBarcodeForContainer(text, container) {
+            // Gera código de barras
+            for (let char of text) {
+                // Converte o caractere para seu código ASCII
+                const asciiCode = char.charCodeAt(0);
+                
+                // Cria barras com base no código ASCII
+                const bar = document.createElement('div');
+                bar.classList.add('bar');
+                
+                // Largura da barra baseada no código ASCII
+                // Divide por 2 para não criar barras muito largas
+                bar.style.width = `${(asciiCode % 12) + 1}px`;
+                
+                container.appendChild(bar);
+            }
+        }
+        function generateDisc() {
+            const desc = removeAcentosECedilha(valorDescricao.value).trim();
+            if (desc.length <= 26){
+                descriptionText1.textContent = desc || '';
+                descriptionText2.textContent = desc || '';
+            } else {
+                descriptionText1.textContent = desc.substring(0, 26) + "\n" + desc.substring(26);
+                descriptionText2.textContent = desc.substring(0, 26) + "\n" + desc.substring(26);
+            }
+        }
     </script>
 </body>
 </html>
