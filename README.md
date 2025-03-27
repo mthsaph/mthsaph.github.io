@@ -1,36 +1,65 @@
-Esta página web é uma aplicação simples para impressão de etiquetas. Vou explicar as principais funcionalidades:
+# 🏷️ PJeOffice Label Printing System
 
-### **Impressão de etiquetas individuais:**
+## 📌 Descrição Geral
 
-- Permite inserir uma descrição e um número de patrimônio
-- Ao clicar no botão "IMPRIMIR ETIQUETA", o sistema gera uma etiqueta com código de barras
-- Cada etiqueta contém o número de patrimônio em texto e em código de barras
-- A descrição é dividida em até duas linhas (máximo de 26 caracteres por linha)
+Este sistema de impressão de etiquetas é uma aplicação web desenvolvida para a Justiça Federal (JFMS) que permite a geração e impressão de etiquetas de patrimônio de forma rápida e simples.
 
+## ✨ Funcionalidades Principais
 
-### **Impressão em lote:**
+### 1. Impressão de Etiqueta Individual
+- Permite inserir um número de patrimônio e descrição do item
+- Gera uma etiqueta com código de barras personalizado
+- Suporta impressão em tempo real com pré-visualização
 
-- Inclui uma área de texto onde se pode colar dados de uma planilha
-- O formato esperado é "número descrição" em cada linha
-- Ao clicar em "IMPRIMIR ETIQUETAS EM LOTE", o sistema processa todas as linhas e imprime múltiplas etiquetas
+### 2. Impressão em Lote
+- Possibilita colar dados de uma planilha para impressão múltipla de etiquetas
+- Processamento em lote de vários itens simultaneamente
 
+## 🛠️ Tecnologias Utilizadas
+- HTML5
+- Bootstrap 5.3
+- JavaScript
+- PJeOffice Pro API para impressão
 
-### **Validações e tratamento de dados:**
+## 🖨️ Processo de Impressão
 
-- Remove acentos e cedilhas das descrições
-- Verifica se o campo de patrimônio contém apenas números
-- Limita o número de patrimônio a valores menores que 100.000.000
-- Não permite campos em branco
-- Formata automaticamente o texto para caber nas etiquetas
+### Etiqueta Padrão
+- Contém número de patrimônio
+- Código de barras gerado dinamicamente
+- Descrição do item
 
+### Detalhes Técnicos
+- Tamanho da etiqueta: 5 cm x 3.2 cm
+- Suporte a impressoras via porta LPT1
+- Formatação compatível com impressoras de etiquetas
 
-### **Tecnologia:**
+## 🚀 Como Usar
 
-- Utiliza o "PJeOffice Pro" para enviar comandos de impressão
-- Gera etiquetas no formato ZPL (Zebra Programming Language), que é específico para impressoras térmicas de etiquetas
-- Envia os dados para a porta de impressora "LPT1"
-- Inclui funções de callback para sucesso, falha e indisponibilidade do serviço
+### Impressão Individual
+1. Digite o número do patrimônio
+2. Insira a descrição do item
+3. Clique em "IMPRIMIR ETIQUETA"
 
+### Impressão em Lote
+1. Cole dados da planilha no campo de texto
+2. Formato: `[NÚMERO] [DESCRIÇÃO]`
+3. Clique em "IMPRIMIR ETIQUETAS EM LOTE"
 
+## ⚠️ Observações
+- Remove automaticamente acentos e caracteres especiais
+- Limita descrição para melhor visualização
+- Requer PJeOffice Pro instalado e configurado
 
-A página tem um visual simples com o logo e identificação da Justiça Federal de Mato Grosso do Sul, e exibe alertas com mensagens bem-humoradas quando há erros na entrada de dados.
+## 📋 Exemplo de Entrada em Lote
+```
+12345 MONITOR LCD 20 POLEGADAS
+67890 TECLADO ERGONÔMICO
+```
+
+## 🔒 Requisitos
+- Navegador web moderno
+- PJeOffice Pro instalado
+- Impressora compatível
+
+## 📧 Suporte
+Em caso de dúvidas, entre em contato com o suporte de TI da Justiça Federal.
