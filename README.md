@@ -62,4 +62,4 @@ Este sistema de impressão de etiquetas é uma aplicação web desenvolvida para
 - Impressora compatível
 
 ## 📧 Suporte
-Em caso de dúvidas, entre em contato com o suporte de TI da Justiça Federal.
+Em caso de dúvidas, entre em contato com matheusaraharb@gmail.com
