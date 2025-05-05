@@ -29,7 +29,7 @@ Este sistema de impressão de etiquetas é uma aplicação web desenvolvida para
 - Descrição do item
 
 ### Detalhes Técnicos
-- Tamanho da etiqueta: 5 cm x 3.2 cm
+- Tamanho da etiqueta: 5 cm x 3 cm
 - Suporte a impressoras via porta LPT1
 - Formatação compatível com impressoras de etiquetas
 
