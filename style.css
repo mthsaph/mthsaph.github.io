@@ -1,45 +1,249 @@
-body {
-    background-color: #f4f6f9;
-    font-family: 'Arial', sans-serif;
-}
-.navbar-custom {
-    background-color: #00295f;
-    color: #FFFFFF;
-    padding: 15px 0;
-}
-.card-container {
-    max-width: 600px;
-    margin: 30px auto;
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    padding: 30px;
-}
-.form-label {
-    font-weight: 600;
-    color: #00295f;
-}
-.btn-custom {
-    background-color: #00295f;
-    color: white;
-    border: none;
-    transition: all 0.3s ease;
-}
-.btn-custom:hover {
-    background-color: #001f40;
-    transform: translateY(-2px);
-}
-.textarea-custom {
-    resize: vertical;
-}
-.logo-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-@media (max-width: 768px) {
-    .card-container {
-        margin: 15px;
-        padding: 20px;
-    }
-}
+/* --- VARIÁVEIS DE CORES (PALETA ROXO, PRETO, BRANCO) --- */
+        :root {
+            --color-primary: #7c3aed; /* Roxo Vibrante */
+            --color-primary-dark: #5b21b6; /* Roxo Escuro (Hover) */
+            --color-secondary: #000000; /* Preto */
+            --color-text-main: #1f2937; /* Cinza Escuro para texto */
+            --color-text-light: #6b7280; /* Cinza Médio */
+            --color-bg: #ffffff; /* Branco */
+            --color-bg-alt: #f3f4f6; /* Cinza muito claro para seções alternadas */
+            --border-radius: 999px;
+        }
+
+        /* --- RESET E GERAL --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--color-text-main);
+            background-color: var(--color-bg);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        img, video { max-width: 100%; height: auto; display: block; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- UTILITÁRIOS --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .text-center { text-align: center; }
+        .section-padding { padding: 60px 0; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 32px;
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+        .btn:hover {
+            background-color: var(--color-primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero { padding: 40px 0 40px; text-align: center; }
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 600;
+            color: var(--color-secondary);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        .hero h1 span { display: block; font-weight: 800; color: var(--color-primary); }
+        .hero p {
+            font-size: 18px;
+            color: var(--color-text-light);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        .phone-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        .phone-mockup {
+            border: 12px solid #1f2937;
+            border-radius: 40px;
+            overflow: hidden;
+            width: 300px;
+            height: 600px;
+            background: #000;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .phone-mockup video, .phone-mockup img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- MARQUEE (FAIXA ROLANTE) --- */
+        .marquee-section { padding: 40px 0; overflow: hidden; background: #fff; }
+        .marquee-track {
+            display: flex;
+            gap: 15px;
+            width: max-content;
+            animation: scroll 25s linear infinite;
+        }
+        .marquee-item {
+            padding: 12px 24px;
+            border: 2px solid var(--color-primary);
+            border-radius: 50px;
+            color: var(--color-secondary);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .marquee-track.reverse { animation-direction: reverse; margin-top: 15px; }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- TEXTO RICO --- */
+        .rich-text { background-color: var(--color-primary); color: white; padding: 60px 20px; text-align: center; }
+        .rich-text h2 { font-size: 32px; margin-bottom: 20px; }
+        .rich-text p { font-size: 18px; margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .rich-text .btn { background-color: white; color: var(--color-primary); }
+        .rich-text .btn:hover { background-color: #f0f0f0; }
+
+        /* --- SEÇÕES ALTERNADAS (IMAGEM + TEXTO) --- */
+        .feature-row {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            padding: 60px 0;
+            flex-direction: column; /* Mobile first */
+        }
+        @media(min-width: 768px) {
+            .feature-row { flex-direction: row; }
+            .feature-row.reverse { flex-direction: row-reverse; }
+        }
+        .feature-text { flex: 1; padding: 20px; }
+        .feature-media { flex: 1; }
+        .feature-media video, .feature-media img {
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .feature-text h2 { font-size: 32px; margin-bottom: 15px; color: var(--color-primary); font-weight: 700; }
+        .feature-text p { color: var(--color-text-light); font-size: 16px; margin-bottom: 20px; }
+
+        /* --- PLANOS (PRETO E ROXO) --- */
+        .plans-section {
+            background-color: var(--color-bg);
+            padding: 80px 20px;
+            text-align: center;
+        }
+        .plan-card {
+            background-color: #000000; /* Fundo Preto */
+            color: #ffffff;
+            max-width: 400px;
+            margin: 40px auto 0;
+            border-radius: 24px;
+            padding: 40px 30px;
+            border: 1px solid #333;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .plan-badge {
+            background: rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--color-primary); /* Texto Roxo */
+            border: 1px solid var(--color-primary);
+        }
+        .price { font-size: 48px; font-weight: 800; color: white; }
+        .price span { font-size: 20px; color: #aaa; font-weight: 400; }
+        .benefits-list { text-align: left; margin: 30px 0; }
+        .benefits-list li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #e5e5e5;
+        }
+        .check-icon { color: var(--color-primary); font-weight: bold; }
+        .plan-btn {
+            background-color: var(--color-primary);
+            color: white;
+            width: 100%;
+            display: block;
+            padding: 18px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .plan-btn:hover { background-color: var(--color-primary-dark); }
+        .bonus-text { font-size: 12px; color: #aaa; margin-top: 20px; border-top: 1px solid #333; padding-top: 15px; }
+
+        /* --- FAQ --- */
+        .faq-section { padding: 80px 20px; background: var(--color-bg-alt); }
+        .faq-container { max-width: 800px; margin: 0 auto; }
+        .faq-item {
+            background: white;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .faq-question {
+            padding: 20px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            background: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-answer {
+            padding: 0 20px 20px;
+            display: none;
+            color: var(--color-text-light);
+            font-size: 14px;
+        }
+        .faq-item.active .faq-answer { display: block; }
+        .faq-item.active .icon-plus { transform: rotate(45deg); }
+
+        /* --- FOOTER --- */
+        footer { padding: 40px 20px; background: #f9fafb; text-align: center; border-top: 1px solid #eee; }
+        footer p { color: #888; font-size: 14px; margin-top: 20px; }
+        .social-links { margin-top: 20px; }
+        .social-links a { color: var(--color-primary); margin: 0 10px; font-weight: 600; }
+
+        /* --- MOBILE ADJUSTMENTS --- */
+        @media (max-width: 768px) {
+            .phone-mockup { width: 260px; height: 520px; }
+            .phone-mockup:nth-child(2), .phone-mockup:nth-child(3) { display: none; } /* Show only 1 phone on mobile like original */
+            .phone-mockup:first-child { display: block; } 
+            /* Se quiser mostrar video no mobile, mude a ordem */
+        }
