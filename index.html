@@ -3,218 +3,786 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu  - Organização Financeira</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link href="./style.css" rel="stylesheet">
-    
+    <title>PJeOffice Pro - Etiquetas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar-custom {
+            background-color: #00295f;
+            color: #FFFFFF;
+            padding: 15px 0;
+        }
+        .card-container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #00295f;
+        }
+        .btn-custom {
+            background-color: #00295f;
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            background-color: #001f40;
+            transform: translateY(-2px);
+        }
+        .textarea-custom {
+            resize: vertical;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .card-container {
+                margin: 15px;
+                padding: 20px;
+            }
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #print-area, #print-area * {
+                visibility: visible;
+            }
+            #print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
 
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: start;
+        }
+
+        #label-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .label {
+            width: 200px; /* 5 cm em pixels (96 DPI) */
+            height: 120.472px; /* 3.2 cm em pixels (96 DPI) */
+            border: 1px solid black;
+            margin: 0 25px; /* 1.5 cm de espaço entre etiquetas */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #barcode-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .barcode {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            width: 100%;
+            margin-left: 20px;
+        }
+
+        .bar {
+            background-color: black;
+            height: 40px;
+            margin: 0 1px;
+        }
+
+        .label-top {
+            font-size: 20px;
+            font-weight: 900;
+            align-self: flex-start;
+            margin: 0px 10px;
+        }
+
+        .label-bot{
+            font-size: 12px;
+            font-weight: bolder;
+            align-self: flex-start;
+            margin: 0px 10px;
+        }
+    </style>
+<script>
+/********************************************************************************************************
+/* A LIGHTWEIGHT XMLHttpRequest LIBRARY 
+/*******************************************************************************************************/
+
+const PjeClient=function(){function t(){}t.ajax=function(t){t=t||{url:""},t.type=t.type&&t.type.toUpperCase()||"GET",t.headers=t.headers||{},t.timeout=parseInt(t.timeout)||0,t.success=t.success||function(){},t.error=t.error||function(){},t.async="undefined"==typeof t.async?!0:t.async;var e=new XMLHttpRequest;t.timeout>0&&(e.timeout=t.timeout,e.ontimeout=function(){t.error("timeout","timeout",e)}),e.open(t.type,t.url,t.async);for(var s in t.headers)t.headers.hasOwnProperty(s)&&e.setRequestHeader(s,t.headers[s]);return e.send(t.data),e.onreadystatechange=function(){if(4==this.readyState&&(this.status>=200&&this.status<300||304==this.status)){var e=this.responseText,s=this.getResponseHeader("Content-Type");s&&s.match(/json/)&&(e=JSON.parse(this.responseText)),t.success(e,this.statusText,this)}else 4==this.readyState&&t.error(this.status,this.statusText,this)},0==t.async&&(4==e.readyState&&(e.status>=200&&e.status<300||304==e.status)?t.success(e.responseText,e):4==e.readyState&&t.error(e.status,e.statusText,e)),e};var e=function(e,s,n,r){return"function"==typeof n&&(r=n,n=void 0),t.ajax({url:s,data:n,type:e,success:r})};return t.get=function(t,s,n){return e("GET",t,s,n)},t.head=function(t,s,n){return e("HEAD",t,s,n)},t.post=function(t,s,n){return e("POST",t,s,n)},t.patch=function(t,s,n){return e("PATCH",t,s,n)},t.put=function(t,s,n){return e("PUT",t,s,n)},t["delete"]=function(t,s,n){return e("DELETE",t,s,n)},t.options=function(t,s,n){return e("OPTIONS",t,s,n)},t}();__=PjeClient;
+
+
+/********************************************************************************************************
+/* UTILITIES FUNCTIONS
+/*******************************************************************************************************/
+
+const readJson = function(json) {
+  const jsonStringify = JSON.stringify;  
+  const arrayToJson = Array.prototype.toJSON;
+  delete Array.prototype.toJSON;
+  const output = jsonStringify(json);
+  Array.prototype.toJSON = arrayToJson;
+  return output;
+};
+
+const readCookie = function (cookieName) {
+  const cookiePrefix = cookieName + "=";
+  const decodedCookies = decodeURIComponent(document.cookie);
+  const cookieItems = decodedCookies.split(';');
+  for(let i = 0; i < cookieItems.length; i++) {
+    let cookie = cookieItems[i];
+    while (cookie.charAt(0) == ' ') {
+      cookie = cookie.substring(1);
+    }
+    if (cookie.indexOf(cookiePrefix) == 0) {
+      return cookie;
+    }
+  }
+  return "";
+};
+
+let readSession = function () {
+  return document.cookie; // return readCookie('JSESSIONID'); 
+};
+
+/*****************************************************************************************************************
+* A constante 'PJEOFFICE_DEFAULT_ARGUMENTS' é a configuração 'global' padrão usada pela instância PjeOffice. Alternativamente 
+* você pode remover este código daqui e definir esta instância na sua aplicação com todos os atributos e colocá-la 
+* no escopo global javascript. 
+/*****************************************************************************************************************/
+
+const PJEOFFICE_DEFAULT_ARGUMENTS = {
+  //Aplicação que faz uso do PJeOffice
+  //Este parâmetro é OBRIGATÓRIO e deveria ser entendido como uma constante por toda aplicação.
+  //O valor deste parâmetro DEVE ser exatamente o mesmo definido no campo 'Nome da aplicação' do formulário
+  //mantido no endereço: https://pjeoffice.pje.jus.br/  
+  "APP_REQUISITANTE"  : "PJe",
+
+  //Código de segurança da aplicação - proteção CSRF fornecido pelo CNJ
+  //Este parâmetro é OBRIGATÓRIO, deveria ser entendido como uma constante por toda aplicação e pode ser gerado
+  //no endereço eletrônico https://pjeoffice.pje.jus.br/. Para os fins deste guia com foco no desenvolvedor, o 
+  //modo desenvolvimento habilitado tornará esta informação irrelevante.
+  "CODIGO_SEGURANCA"  : "bypass",
+
+  //O contexto raiz da aplicação. Comporá o parâmetro 'servidor' do payload de requisição ao PJeOffice Pro.
+  //Este parâmetro é OBRIGATÓRIO e deveria ser entendido como uma constante por toda aplicação 
+  //OBS: Troque /pjeOffice pelo contexto da aplicação do servidor do Pje (comumente /pje). Aqui é informado /pjeOffice
+  //porque o próprio PJeOffice Pro emula o backend web para demonstração da API de integração
+  //Nota 1: Este parâmetro DEVE iniciar com '/' já que comporá o endereço completo a partir de 'window.location.origin' 
+  //Nota 2: Este parâmetro NÃO deve finalizar com o caracter '/' já que os caminhos relativos exigidos por alguma API já 
+  //serão iniciado com '/' e concatenado a este parâmetro
+  "WEB_CONTEXT"       : "/pjeOffice",
+
+  //Para ambientes de testes, desenvolvimento, treinamento e cia informe MODO_TESTE=true. Informe false para produção
+  //Este parâmetro impede o envio de hash's assinados em ambientes de treinamento ou similares (API signHash)
+  //Este parâmetro é OBRIGATÓRIO e deveria ser entendido como uma constante por toda aplicação 
+  "MODO_TESTE"        : false,
+
+  //O timeout padrão das requisições PUT entre o navegador e o PJeOffice Pro.
+  //Este parâmetro é OBRIGATÓRIO e PODE SER SOBRESCRITO dinamicamente em tempo de chamada API  
+  "REQUEST_TIMEOUT"   : 600000, //milliseconds (10 minutes)
+
+  //Algoritmo padrão utilizado para assinatura de hash's, família ASN1?withRSA
+  //Exemplos: ASN1MD5withRSA, ASN1MD2withRSA, ASN1SHA1withRSA, ASN1SHA256withRSA, ASN1SHA384withRSA, ASN1SHA512withRSA  
+  //Este parâmetro é OBRIGATÓRIO e PODE SER SOBRESCRITO dinamicamente em tempo de chamada API signHash
+  "ALGORITMO_ASSINATURA_HASH"    : "ASN1MD5withRSA",
+  
+  //Algoritmo padrão utilizado para assinatura da mensagem desafio de autenticação
+  //Exemplos:  MD2withRSA, MD5withRSA, SHA1withRSA, SHA256withRSA, SHA384withRSA, SHA512withRSA   
+  //Este parâmetro é OBRIGATÓRIO e PODE SER SOBRESCRITO dinamicamente em tempo de chamada API login / loginSSO
+  "ALGORITMO_AUTENTICACAO"       : "MD5withRSA",
+  
+  //Algoritmo padrão utilizado para assinatura de documentos (não hash's).
+  //Este parâmetro é OBRIGATÓRIO e PODE SER SOBRESCRITO dinamicamente em tempo de chamada API signRemote / signBase64
+  //Exemplos:  MD2withRSA, MD5withRSA, SHA1withRSA, SHA256withRSA, SHA384withRSA, SHA512withRSA
+  "ALGORITMO_ASSINATURA"         : "SHA256withRSA",
+
+  //O padrão de assinatura que será utilizado tal que:
+  //CADES: Será assinado como um arquivo application/pkcs7-signature (.p7s)
+  //XADES: Será assinado como um arquivo application/xml (.xml)
+  //Este parâmetro é OBRIGATÓRIO e PODE SER SOBRESCRITO dinamicamente em tempo de chamada API signRemote
+  "PADRAO_ASSINATURA"            : "CADES",
+  
+  //Tipo padrão de assinatura p7s
+  //  ATTACHED: conteúdo vinculado à assinatura 
+  //  DETACHED: conteúdo desvinculado da assinatura
+  //Este parâmetro é OBRIGATÓRIO e PODE SER SOBRESCRITO dinamicamente em tempo de chamada API signRemote
+  "TIPO_ASSINATURA"      : "ATTACHED",
+  
+  //Página padrão de autenticação que receberá a mensagem desafio assinada 
+  //Este parâmetro é OBRIGATÓRIO e PODE SER SOBRESCRITO dinamicamente em tempo de chamada API login / loginSSO
+  //Este caminho deve ser relativo a WEB_CONTEXT
+  //Nota: Este parâmetro DEVE iniciar com '/'
+  "PAGINA_LOGIN"         : "/fakeBackend",
+        
+  //Página padrão que receberá assinaturas de hash's
+  //Este parâmetro é OBRIGATÓRIO e PODE SER SOBRESCRITO dinamicamente em tempo de chamada API signHash
+  //Este caminho deve ser relativo a WEB_CONTEXT
+  //Nota: Este parâmetro DEVE iniciar com '/'
+  "PAGINA_ASSINATURA"    : "/fakeBackend",
+        
+  //Página padrão que receberá arquivos assinados em P7S
+  //Este parâmetro é OBRIGATÓRIO e PODE SER SOBRESCRITO dinamicamente em tempo de chamada API signRemote / signBase64
+  //Este caminho deve ser relativo a WEB_CONTEXT
+  //Nota: Este parâmetro DEVE iniciar com '/'
+  "PAGINA_UPLOAD"        : "/fakeBackend",
+  
+  //Página padrão que receberá a cadeia de certificados do usuário
+  //Este parâmetro é OBRIGATÓRIO e PODE SER SOBRESCRITO dinamicamente em tempo de chamada API getCertChain
+  //Este caminho deve ser relativo a WEB_CONTEXT
+  //Nota: Este parâmetro DEVE iniciar com '/'
+  "PAGINA_CERTCHAIN"     : "/fakeBackend",
+  
+  //Página padrão que retornará um JSON descrevendo a versão mínima exigida do PJEOFFICE com suas respectivas mensagens de alerta:
+  //Este caminho deve ser relativo a WEB_CONTEXT
+  //TRF3:  "/seam/resource/rest/pje-legacy/pje-office/versao"
+  //Nota: Este parâmetro DEVE iniciar com '/'
+  "PAGINA_VERSAO_MINIMA" : "/fakeBackend/minimum"  
+};
+
+
+/********************************************************************************************************
+* Instância PjeOffice disponível para toda a aplicação  
+/*******************************************************************************************************/
+
+const PjeOffice = (function () {
+    
+  function PjeOffice() {}
+
+  //Options 1: http using port 8800
+  //Options 2: httpS using port 8801  (require accept localhost certificate on browser)
+  
+  const PJEOFFICE_PROTOCOL         = "http";
+  const PJEOFFICE_PORT             = 8800;
+  
+  //Please do NOT change these constants if you don't know what you really doing
+  const PJEOFFICE_BASE_ENDPOINT    = PJEOFFICE_PROTOCOL + "://127.0.0.1:" + PJEOFFICE_PORT;
+  const PJEOFFICE_BASE_CONTEXT     = "/pjeOffice/";
+  const PJEOFFICE_TASK_ENDPOINT    = PJEOFFICE_BASE_CONTEXT + "requisicao/";
+  const PJEOFFICE_LOGOUT_ENDPOINT  = PJEOFFICE_BASE_CONTEXT + "logout/";
+  const PJEOFFICE_VERSION_ENDPOINT = PJEOFFICE_BASE_CONTEXT + "versao/"
+  const PJEOFFICE_LOGGER_ENDPOINT  = PJEOFFICE_BASE_CONTEXT + "logger/";
+  const PJEOFFICE_PREFLIGHT_METHOD = "PUT";
+  const PJEOFFICE_TIMEOUT_ALERT    = 'Alcançado tempo máximo de espera por resposta do PJeOffice Pro (timeout)';     
+
+  const noCache = function() {
+    const now = new Date().getTime();
+    return '&u=' + (Math.floor(Math.random() * now) + now); //random number!
+  };
+
+  const fullRequest = function (method, url, body, apiContext, checkSuccess) {
+    const argument      = apiContext?.argument;
+    const onSuccess     = apiContext?.onSuccess;
+    const onFailed      = apiContext?.onFailed;
+    const onUnavailable = apiContext?.onUnavailable;
+    let complete = false;
+    PjeClient.ajax({
+      "url": url,
+      "type": method,
+      "headers": { "Content-Type": 'application/json', "Force-Preflight": 'true'},
+      "timeout": argument?.REQUEST_TIMEOUT || PJEOFFICE_DEFAULT_ARGUMENTS.REQUEST_TIMEOUT,
+      "async": true,
+      "data": body,
+      "error": function(status, statusText, httpClient) {
+        if ('timeout' === status)
+          alert(PJEOFFICE_TIMEOUT_ALERT);    
+        if (complete) 
+          return;
+        complete = true;
+        if (onUnavailable)
+          onUnavailable(statusText); 
+      },
+      "success": function(data, statusText, httpClient) {
+        if (complete)
+          return;
+        complete = true;
+        const success = checkSuccess(data);
+        if (success) {
+          if (onSuccess)
+            onSuccess(data);
+        } else {
+          if (onFailed)
+            onFailed(statusText);  
+        }
+      }
+    });
+  };
+  
+  const request = function(method, endPoint, body, apiContext, checkSuccess) {
+    return fullRequest(
+      method, 
+      PJEOFFICE_BASE_ENDPOINT + endPoint, 
+      body, 
+      apiContext, 
+      checkSuccess
+    );      
+  };
+  
+  const isObject = function(data) {
+    return (typeof data === 'object');
+  };
+  
+  const send = function(endPoint, noParams, body, apiContext, checkSuccess) {
+    request(
+      PJEOFFICE_PREFLIGHT_METHOD, 
+      endPoint + (noParams ? "?" : "") + noCache(), 
+      body, 
+      apiContext, 
+      checkSuccess || function(data) {
+        return isObject(data) && data.success;
+      }
+    );
+  };
+  
+  const get = function(url, apiContext, checkSuccess) {
+    fullRequest(
+      "GET",
+      url, 
+      null, //GET has no body 
+      apiContext, 
+      checkSuccess || isObject
+    ); 
+  };
+  
+  const createBodyRequest = function(taskId, task) {
+    return readJson({
+      "sessao": readSession(),
+      "aplicacao": PJEOFFICE_DEFAULT_ARGUMENTS.APP_REQUISITANTE,
+      "servidor": window.location.origin + PJEOFFICE_DEFAULT_ARGUMENTS.WEB_CONTEXT,
+      "codigoSeguranca": PJEOFFICE_DEFAULT_ARGUMENTS.CODIGO_SEGURANCA,
+      "tarefaId": taskId,
+      "tarefa": readJson(task)  
+    });
+  };
+  
+  const runTask = function(taskId, task, apiContext) {
+    send(
+      PJEOFFICE_TASK_ENDPOINT, 
+      true,
+      createBodyRequest(taskId, task), 
+      apiContext
+    );
+  };
+  
+  const match = function(v1, v2) {
+    v1 = v1.split('.');
+    v2 = v2.split('.');
+    const k = Math.min(v1.length, v2.length);
+    for (let i = 0; i < k; i++) {
+      v1[i] = parseInt(v1[i], 10);
+      v2[i] = parseInt(v2[i], 10);
+      if (v1[i] > v2[i]) return 1;
+      if (v1[i] < v2[i]) return -1;        
+    }
+    return v1.length == v2.length ? 0: (v1.length < v2.length ? -1 : 1);
+  };
+  
+  PjeOffice.logout = function(apiContext) {
+    send(
+      PJEOFFICE_LOGOUT_ENDPOINT, 
+      true, 
+      null, //no body 
+      apiContext
+    );
+  };
+
+  PjeOffice.ping = function(apiContext) {
+    send(
+      PJEOFFICE_BASE_CONTEXT, 
+      true, 
+      null, //no body 
+      apiContext
+    );
+  };
+  
+  PjeOffice.about = function(apiContext) {
+    send(
+      PJEOFFICE_VERSION_ENDPOINT, 
+      true, 
+      null, //no body 
+      apiContext, 
+      isObject
+    );
+  };
+  
+  PjeOffice.getLog = function(windowSize, apiContext) {
+    send(
+      PJEOFFICE_LOGGER_ENDPOINT + '?windowSize=' + windowSize, 
+      false, 
+      null, //no body 
+      apiContext
+    );
+  };
+  
+  PjeOffice.login = function(challengePhrase, apiContext) {
+    runTask('cnj.autenticador', {
+      "enviarPara": apiContext?.argument?.PAGINA_LOGIN || PJEOFFICE_DEFAULT_ARGUMENTS.PAGINA_LOGIN,
+      "mensagem": challengePhrase,
+      "algoritmoAssinatura": apiContext?.argument?.ALGORITMO || PJEOFFICE_DEFAULT_ARGUMENTS.ALGORITMO_AUTENTICACAO,
+    }, apiContext);
+  };
+
+  PjeOffice.loginSSO = function(challengePhrase, token, apiContext) {
+    runTask('sso.autenticador', {
+      "enviarPara": apiContext?.argument?.PAGINA_LOGIN || PJEOFFICE_DEFAULT_ARGUMENTS.PAGINA_LOGIN,
+      "mensagem": challengePhrase,
+      "token": token,
+      "algoritmoAssinatura": apiContext?.argument?.ALGORITMO || PJEOFFICE_DEFAULT_ARGUMENTS.ALGORITMO_AUTENTICACAO
+    }, apiContext);  
+  };
+    
+  PjeOffice.signHash = function(documents, apiContext) {
+    runTask('cnj.assinadorHash', {
+      "algoritmoAssinatura": apiContext?.argument?.ALGORITMO || PJEOFFICE_DEFAULT_ARGUMENTS.ALGORITMO_ASSINATURA_HASH,
+      "uploadUrl": apiContext?.argument?.PAGINA_ASSINATURA || PJEOFFICE_DEFAULT_ARGUMENTS.PAGINA_ASSINATURA,
+      "modoTeste": apiContext?.argument?.MODO_TESTE || PJEOFFICE_DEFAULT_ARGUMENTS.MODO_TESTE,
+      "arquivos": documents
+    }, apiContext);
+  };
+
+  PjeOffice.signRemote = function(documents, apiContext) {
+    runTask('cnj.assinador', {
+      "modo": "REMOTO",
+      "padraoAssinatura": apiContext?.argument?.PADRAO_ASSINATURA || PJEOFFICE_DEFAULT_ARGUMENTS.PADRAO_ASSINATURA,
+      "tipoAssinatura": apiContext?.argument?.TIPO_ASSINATURA || PJEOFFICE_DEFAULT_ARGUMENTS.TIPO_ASSINATURA,
+      "enviarPara": apiContext?.argument?.PAGINA_UPLOAD || PJEOFFICE_DEFAULT_ARGUMENTS.PAGINA_UPLOAD,
+      "algoritmoHash": apiContext?.argument?.ALGORITMO || PJEOFFICE_DEFAULT_ARGUMENTS.ALGORITMO_ASSINATURA,
+      "arquivos": documents
+    }, apiContext);
+  };
+  
+  PjeOffice.signBase64 = function(documents, apiContext) {
+    runTask('cnj.assinadorBase64', {
+      "algoritmoAssinatura": apiContext?.argument?.ALGORITMO || PJEOFFICE_DEFAULT_ARGUMENTS.ALGORITMO_ASSINATURA,
+      "uploadUrl": apiContext?.argument?.PAGINA_UPLOAD || PJEOFFICE_DEFAULT_ARGUMENTS.PAGINA_UPLOAD,
+      "arquivos": documents
+    }, apiContext);  
+  };
+  
+  PjeOffice.getCertChain = function(apiContext) {
+    runTask('cnj.certchain', {
+      "uploadUrl": apiContext?.argument?.PAGINA_CERTCHAIN || PJEOFFICE_DEFAULT_ARGUMENTS.PAGINA_CERTCHAIN,
+    }, apiContext);
+  };
+
+  PjeOffice.printTag = function(printerPort, content, apiContext) {
+    runTask('util.impressor', {
+      "porta": printerPort,
+      "conteudo": content
+    }, apiContext);
+  };
+  
+  PjeOffice.simpleTest = function(message, apiContext) {
+    runTask('util.test', {
+      "message": message
+    }, apiContext);
+  };
+  
+  const onMinimumServerSuccess = function(apiContext, pjeofficeData, serverData) {  
+    if (serverData.parametros_configurados) {
+      const userVersion   = pjeofficeData.versao;  
+      const explain = "\n\n===== Vers\u00f5es do PJeOffice =====\n\n" +
+        "Do seu computador: " + userVersion + "\n" +
+        "M\u00ednima obrigat\u00f3ria: " + serverData.versao_pje_office_minima_obrigatoria + "\n" +
+        "M\u00ednima recomendada: " + serverData.versao_pje_office_minima_recomendada + "\n" +
+        "Mais recente: " + serverData.versao_pje_office;
+     
+      let compare = match(userVersion, serverData.versao_pje_office_minima_obrigatoria);     
+      if (compare == -1) {
+        const failMessage = serverData.versao_pje_office_mensagem_bloqueio + explain;
+        alert(failMessage);
+        const onFailed  = apiContext?.onFailed;  //Chamado quando a versão do PJEOFFICE NÃO foi aceita  
+        if (onFailed) {
+          onFailed(failMessage);
+        }
+        return;
+      }
+      
+      compare = match(userVersion, serverData.versao_pje_office_minima_recomendada);
+      if (compare == -1) {
+        alert(serverData.versao_pje_office_mensagem_aviso + explain);
+      } else {
+        compare = match(userVersion, serverData.versao_pje_office);
+        if (compare == -1) {
+          alert(serverData.versao_pje_office_mensagem_recomendacao + explain);
+        }
+      }  
+    }
+    
+    const onSuccess = apiContext?.onSuccess;     //Chamado quando a versão do PJEOFFICE foi aceita
+    if (onSuccess) {
+      onSuccess(serverData);
+    }
+  };
+  
+  const onAboutSuccess = function(apiContext, pjeofficeData) {
+    const argument      = apiContext?.argument;
+    const onUnavailable = apiContext?.onUnavailable; //Invocado quando for impossível concluir se a versão é correta ou não.
+    const resource      = argument?.PAGINA_VERSAO_MINIMA || PJEOFFICE_DEFAULT_ARGUMENTS.PAGINA_VERSAO_MINIMA;
+    const url           = window.location.origin + PJEOFFICE_DEFAULT_ARGUMENTS.WEB_CONTEXT + resource;
+    get(url, {
+      "argument": {
+        "REQUEST_TIMEOUT": argument?.REQUEST_TIMEOUT || PJEOFFICE_DEFAULT_ARGUMENTS.REQUEST_TIMEOUT
+      },  
+      "onUnavailable"    : onUnavailable, //Deve ser tratado como onUnavailable porque neste caso do backend NÃO retornou dados     
+      "onFailed"         : onUnavailable, //Deve ser tratado como onUnavailable TAMBÉM porque neste caso o backend retornou dados mas NÃO é um objeto JSON conhecido    
+      "onSuccess"        : function(serverData) { //Algum dado foi retornado do servidor
+        onMinimumServerSuccess(apiContext, pjeofficeData, serverData);
+      }
+    });
+  };
+  
+  PjeOffice.checkMininum = function(apiContext) {
+    PjeOffice.about({
+      "argument": {
+        "REQUEST_TIMEOUT" : 5000
+      },
+      "onSuccess": function(pjeofficeData) {
+        onAboutSuccess(apiContext, pjeofficeData);
+      },
+      "onUnavailable": function(statusText) {
+         alert("Acesso via certificado digital indispon\u00edvel.\n\n"
+          + "Os procedimentos abaixo podem ajudar a resolver o problema:\n\n"
+          + "- Verifique se o PJeOffice est\u00e1 em execução no seu computador.\n"
+          + "- Verifique se a vers\u00e3o do PJeOffice est\u00e1 atualizada.\n"
+          + "- Atualize a tela do navegador com CTRL+F5.\n\n"
+          + "Abaixo segue informa\u00e7\u00e3o t\u00e9cnica sobre o erro ocorrido:\n"
+          + "- PJeOffice não responde por requisições!"
+        );
+      },
+    });  
+  };
+
+  return PjeOffice;
+})();
+    const printerPort = "LPT1";
+    const apiContext = {
+      "argument": {
+          "REQUEST_TIMEOUT" : 600000,            //Opcional: se não informado será considerado PJEOFFICE_DEFAULT_ARGUMENTS.REQUEST_TIMEOUT   
+      },
+      "onSuccess": function(data) {
+          alert('Legal, deu tudo certo!');
+      },
+      "onFailed": function(statusText) {
+          alert('Infelizmente não foi possível finalizar a ação!');
+      },    
+      "onUnavailable": function(statusText) {
+          alert('Favor abrir o PJEOfficePro!');
+      }
+   };
+
+  function removeAcentosECedilha(str) {
+      // Primeiro, normalize a string para separar caracteres base de seus acentos
+      return str
+          // Normaliza para a forma NFD (decompõe caracteres em caracteres base + marcas de combinação)
+          .normalize('NFD')
+          // Substitui o 'ç' e 'Ç' por 'c' e 'C' antes de remover acentos
+          .replace(/[çÇ]/g, match => match === 'ç' ? 'c' : 'C')
+          // Remove todos os acentos/marcas diacríticas
+          .replace(/[\u0300-\u036f]/g, '')
+  }
+
+
+  function dividirNoPrimeiroEspaco(texto) {
+      // Primeiro, remove espaços em branco consecutivos em todo o texto
+      const textoNormalizado = texto.replace(/\s+/g, ' ');
+      
+      // Encontra o índice do primeiro espaço
+      const indiceEspaco = textoNormalizado.indexOf(' ');
+      
+      // Se não houver espaço, retorna o texto normalizado como primeira entrada e string vazia como segunda
+      if (indiceEspaco === -1) {
+          return [textoNormalizado, ''];
+      }
+      
+      // Divide o texto em duas partes
+      const primeiraParte = textoNormalizado.substring(0, indiceEspaco);
+      const segundaParte = textoNormalizado.substring(indiceEspaco + 1);
+      
+      // Retorna as duas partes como um array
+      return [primeiraParte, segundaParte];
+  }
+
+
+  
+</script>
 </head>
 <body>
-
-    <section class="hero container">
-        <h1>
-            Tenha um   pessoal
-            <span>trabalhando 24 horas por dia pra você</span>
-        </h1>
-        <p>Você ainda tá tentando lembrar tudo de cabeça ou não sabe pra onde está indo seu dinheiro?</p>
-        
-        <a href="#planos" class="btn">Quero ter um   →</a>
-
-        <div class="phone-wrapper">
-            <div class="phone-mockup">
-                 <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ294a29sczV0amhuNGZ0a3FrYmIyNGlocHJtZWtkeThjeHhzaXRmZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/voKRB2g96S8q4/giphy.gif">
-            </div>
-            
-            <div class="phone-mockup" style="display:block;">
-                <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZWl5MXV4NjY1MjFydjA2aW1rZ3ZmdXRzb3NjNWRjNWllNGJpZWJpbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Ii3yAgfTEHPd6/giphy.gif">
-            </div>
-
-             <div class="phone-mockup">
-                <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXFjdTFjajFmZWs3ZDF2dW9naG95ZWo3eHdwc282dmExY3d6M252bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/neSwvX5qtXUru/giphy.gif">
-           </div>
-        </div>
-        
-        <div style="margin-top: 40px;">
-            <a href="#planos" class="btn">Quero ter um   →</a>
-        </div>
-    </section>
-
-    <section class="rich-text">
-        <div class="container">
-            <h2>Sua vida organizada. <span style="text-decoration: underline;">Sem esforço.</span></h2>
-            <p>Já se perdeu no meio de tarefas e despesas? Esqueceu compromissos ou levou um susto com a fatura do cartão?<br>
-            O <strong> </strong> resolve isso: organização financeira e gestão de compromissos, tudo de forma simples e direta pelo WhatsApp.</p>
-            <a href="#planos" class="btn">Quero assinar agora →</a>
-        </div>
-    </section>
-
-    <section class="marquee-section">
-        <h3 class="text-center" style="margin-bottom: 20px; font-size: 24px; font-weight: 700;">Interaja com o   24h por dia</h3>
-        <p class="text-center" style="margin-bottom: 30px; color: #666;">Pergunte o que quiser e como quiser.</p>
-        
-        <div class="marquee-track">
-            <div class="marquee-item">Pergunte e registre o que quiser</div>
-            <div class="marquee-item">Paguei 30 reais de gasolina</div>
-            <div class="marquee-item">Recebi 10 mil reais de salário</div>
-            <div class="marquee-item">Quanto gastei hoje?</div>
-            <div class="marquee-item">Saldo do mês?</div>
-            <div class="marquee-item">Pergunte e registre o que quiser</div>
-            <div class="marquee-item">Paguei 30 reais de gasolina</div>
-            <div class="marquee-item">Recebi 10 mil reais de salário</div>
-        </div>
-
-        <div class="marquee-track reverse">
-            <div class="marquee-item">Quais lembretes eu tenho hoje?</div>
-            <div class="marquee-item">Paguei 100 reais no mercado</div>
-            <div class="marquee-item">Tenho 2 mil reais pro aluguel dia 22</div>
-            <div class="marquee-item">Quanto gastei esse mês?</div>
-            <div class="marquee-item">Quais lembretes eu tenho hoje?</div>
-            <div class="marquee-item">Paguei 100 reais no mercado</div>
-            <div class="marquee-item">Tenho 2 mil reais pro aluguel dia 22</div>
-        </div>
-    </section>
-
     <div class="container">
-        <div class="feature-row">
-            <div class="feature-text">
-                <h2>Painel Profissional</h2>
-                <p>Sem perder tempo com cadastros — seu   faz tudo por você no WhatsApp.</p>
-                <ul>
-                    <li>• Gráficos de fluxo de caixa</li>
-                    <li>• Organização automática</li>
-                    <li>• Prático e acessível</li>
-                </ul>
-            </div>
-            <div class="feature-media">
-                <img src = "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGE0N2N1aDcxOHd0c2V4d2ZpN3hjcGE0M241dXN1d21wNGUza212NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Mo9nI2yBKp3RC/giphy.gif">
-            </div>
-        </div>
+        <div class="card-container">
 
-        <div class="feature-row reverse">
-            <div class="feature-text">
-                <h2>Categorias personalizadas</h2>
-                <p>Use as que já vêm prontas ou crie quantas quiser.</p>
-                <ul>
-                    <li>• Categorias ilimitadas</li>
-                    <li>• Categorização automática</li>
-                    <li>• Relatórios por categoria no WhatsApp</li>
-                </ul>
+            <div class = "text-center form-label">JFMS</div>
+            <div class="logo-container">
+                <img src="jf.png" width="64" height="80" alt="Logo JF">
             </div>
-            <div class="feature-media">
-                <img src = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExamZtMGJnbTRzZ2gxd3dpcDZsZjl4MzFreXBjaDJ2aHd6eW9idzRrYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/12qFOaBbu9TZny/giphy.gif">
-            </div>
-        </div>
 
-        <div class="feature-row">
-            <div class="feature-text">
-                <h2>Lembretes diários via WhatsApp</h2>
-                <p>Seu   te lembra dos compromissos e contas — todo dia de manhã e 30 minutos antes de cada evento.</p>
-                <ul>
-                    <li>• Lembretes ilimitados</li>
-                    <li>• Compromissos e afazeres</li>
-                    <li>• Contas a pagar e a receber</li>
-                </ul>
+            <div class="mb-3">
+                <label for="patrimonio" class="form-label">Título</label>
+                <input type="text" class="form-control" id="patrimonio" maxlength="8" placeholder="Digite números, letras ou símbolos">
             </div>
-            <div class="feature-media">
-                <img src = "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExaWR2am4wZnFtdHIwZTQycHVpMHp6eGtvYWpjd3J2czhuMDB5enFhdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/DqILdGsqAUkms/giphy.gif">
+
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="descricao" maxlength="52" placeholder="Digite a descrição do item">
             </div>
+
+            <div class = "mb-4">
+            <div id="print-area">
+                <div id="label-container">
+                    <div id="label1" class="label">
+                        <div id="label-text1" class="label-top"></div>
+                        <div id="barcode1" class="barcode"></div>
+                        <div id="description-text1" class="label-bot"></div>
+                    </div>
+                    <div id="label2" class="label">
+                        <div id="label-text2" class="label-top"></div>
+                        <div id="barcode2" class="barcode"></div>
+                        <div id="description-text2" class="label-bot"></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <button id="meuBotao" class="btn btn-custom w-100 mb-4">
+                IMPRIMIR ETIQUETA
+            </button>
+
+            <div class="mb-3">
+                <label class="form-label">Impressão em Lote (Copiar e Colar de Planilha)</label>
+                <textarea id="massData" class="form-control textarea-custom" rows="7" placeholder="Cole os dados da planilha aqui.&#10;Formato:&#10;[TÍTULO] [DESCRIÇÃO]&#10;Exemplo:&#10;12498 MONITOR LCD 20 POLEGADAS"></textarea>
+            </div>
+
+            <button id="meuBotaoMassPrint" class="btn btn-custom w-100">
+                IMPRIMIR ETIQUETAS EM LOTE
+            </button>
         </div>
     </div>
+    <script>
+    document.getElementById("meuBotao").addEventListener("click", function() {        
+        const valorDescricao = removeAcentosECedilha(document.getElementById("descricao").value).trim();
+        const num = document.getElementById("patrimonio").value;
+        const valorPatrimonio = num.replace(/ç/g, "c").trim()
 
-    <section id="planos" class="plans-section">
-        <h2 style="font-size: 36px; font-weight: 700; margin-bottom: 10px;">Conheça nossos planos</h2>
-        <p style="color: #666; margin-bottom: 40px;">Organização financeira e pessoal direto no WhatsApp 24h por dia.</p>
+        if (valorDescricao == "" || valorPatrimonio == ""){
+            alert("POR FAVOR NÃO DEIXAR NENHUM DOS CAMPOS EM BRANCO!");
+            return;
+        }
 
-        <div class="plan-card">
-            <div class="plan-badge">🚀 Organize-se Agora</div>
+        const max = Math.min(valorDescricao.length, 26);
+        const descricaoAcima = valorDescricao.substring(0, max).trim();
+        const nvalorDescricao = valorDescricao.substring(max).trim();
+        const descricaoAbaixo = nvalorDescricao.substring(0, Math.min(nvalorDescricao.length, 26)).trim();
+
+        console.log(descricaoAcima, descricaoAbaixo)
+
+        const msg = "^XA ^LL240 ^FO10,30^A0N,40,60^FD" + valorPatrimonio + "^FS ^FO432,30^A0N,40,60^FD" + valorPatrimonio + "^FS ^FO10,80^BY3,3,80^BCN,,N,N,N^FD" + valorPatrimonio + "^FS ^FO432,80^BY3,3,80^BCN,,N,N,N^FD" + valorPatrimonio + "^FS ^FO10,170^A0N,25,28^FD" + descricaoAcima + "^FS ^FO10,200^A0N,25,28^FD" + descricaoAbaixo + "^FS ^FO432,170^A0N,25,28^FD" + descricaoAcima + "^FS ^FO432,200^A0N,25,28^FD" + descricaoAbaixo + "^FS ^XZ";
+        PjeOffice.printTag(printerPort, [msg], apiContext);
+    });
+
+    document.getElementById("meuBotaoMassPrint").addEventListener("click", function() {// MASS PRINT   
+        let content = [];     
+        const valor = removeAcentosECedilha(document.getElementById("massData").value).trim();
+        const L = valor.split("\n");
+        const L2 = L.map(v => v.replace(/[\t\n\r]/g, ' ').trim());
+        const L3 = L2.map(i => dividirNoPrimeiroEspaco(i));
+        const L4 = L3.map(v => [v[0].trim(), v[1].trim()])
+        for(let i = 0; i < L4.length; i++){
+            const valorPatrimonio = L4[i][0];
+            const valorDescricao = L4[i][1];
+            const max = Math.min(valorDescricao.length, 26);
+            const descricaoAcima = valorDescricao.substring(0, max).trim();
+            const nvalorDescricao = valorDescricao.substring(max).trim();
+            const descricaoAbaixo = nvalorDescricao.substring(0, Math.min(nvalorDescricao.length, 26)).trim();
+
+            const msg = "^XA ^LL240 ^FO10,30^A0N,40,60^FD" + valorPatrimonio + "^FS ^FO432,30^A0N,40,60^FD" + valorPatrimonio + "^FS ^FO10,80^BY3,3,80^BCN,,N,N,N^FD" + valorPatrimonio + "^FS ^FO432,80^BY3,3,80^BCN,,N,N,N^FD" + valorPatrimonio + "^FS ^FO10,170^A0N,25,28^FD" + descricaoAcima + "^FS ^FO10,200^A0N,25,28^FD" + descricaoAbaixo + "^FS ^FO432,170^A0N,25,28^FD" + descricaoAcima + "^FS ^FO432,200^A0N,25,28^FD" + descricaoAbaixo + "^FS ^XZ";
+            console.log(msg)
+            content.push(msg);
+
+
+        }
+
+        PjeOffice.printTag(printerPort, content, apiContext);
+    });
+
+        const input = document.getElementById('patrimonio');
+        const barcode1 = document.getElementById('barcode1');
+        const barcode2 = document.getElementById('barcode2');
+        const labelText1 = document.getElementById('label-text1');
+        const labelText2 = document.getElementById('label-text2');
+        const descriptionText1 = document.getElementById('description-text1');
+        const descriptionText2 = document.getElementById('description-text2');
+        const valorDescricao = document.getElementById("descricao")        
+
+        input.addEventListener('input', generateLabels);
+        valorDescricao.addEventListener('input', generateDisc);
+        function generateLabels() {
+            // Limpa os códigos de barras anteriores
+            barcode1.innerHTML = '';
+            barcode2.innerHTML = '';
             
-            <div style="display: flex; justify-content: center; align-items: baseline; gap: 5px;">
-                <span style="font-size: 24px;">R$</span>
-                <span class="price">29,90</span>
-                <span>/mês</span>
-            </div>
-            <div style="margin-bottom: 20px; color: #aaa;">12 x R$ 29,90</div>
-
-            <div class="bonus-text" style="color: #d1d5db; margin-bottom: 20px;">
-                Economia de 49% – Somente esse mês.<br><br>
-                <strong>Bônus:</strong> Gestão Compartilhada (Adicione membros da família).<br>
-                <strong>Bônus:</strong> Integração Google Agenda.
-            </div>
-
-            <a href="https://github.com/mthsaph" class="plan-btn">Garanta já</a>
-
-            <ul class="benefits-list">
-                <li><span class="check-icon">✔</span> Registro de compromissos e afazeres</li>
-                <li><span class="check-icon">✔</span> Registro de gastos e receitas</li>
-                <li><span class="check-icon">✔</span> Transações recorrentes</li>
-                <li><span class="check-icon">✔</span> Pergunte o que quiser saber</li>
-                <li><span class="check-icon">✔</span> Lembretes ilimitados</li>
-                <li><span class="check-icon">✔</span> Painel para acompanhamento</li>
-                <li><span class="check-icon">✔</span> Conecte mais pessoas à conta</li>
-            </ul>
-        </div>
-    </section>
-
-    <section class="faq-section">
-        <div class="faq-container">
-            <h2 class="text-center" style="margin-bottom: 40px; font-size: 32px; font-weight: 700;">Perguntas Frequentes</h2>
+            // Obtém o texto digitado
+            const text = (input.value).replace(/ç/g, "c");
             
-            <div class="faq-item">
-                <button class="faq-question">
-                    Como funciona?
-                    <span class="icon-plus">+</span>
-                </button>
-                <div class="faq-answer">
-                    O automatiza o controle das suas finanças, afazeres e compromissos com base nas informações que você envia via WhatsApp. Simples e prático.
-                </div>
-            </div>
+            // Exibe o texto das etiquetas
+            labelText1.textContent = text || '';
+            labelText2.textContent = text || '';
 
-            <div class="faq-item">
-                <button class="faq-question">
-                    Meus dados financeiros estão seguros?
-                    <span class="icon-plus">+</span>
-                </button>
-                <div class="faq-answer">
-                    Sim. Todas as informações são criptografadas de ponta a ponta e armazenadas com segurança nos servidores da AWS.
-                </div>
-            </div>
+            // Se não houver texto, não gera código de barras
+            if (!text) return;
 
-            <div class="faq-item">
-                <button class="faq-question">
-                    Preciso ter conhecimentos técnicos?
-                    <span class="icon-plus">+</span>
-                </button>
-                <div class="faq-answer">
-                    Não! O  foi criado para ser usado por qualquer pessoa, mesmo sem nenhuma experiência com finanças.
-                </div>
-            </div>
+            // Gera código de barras para ambas as etiquetas
+            generateBarcodeForContainer(text, barcode1);
+            generateBarcodeForContainer(text, barcode2);
+        }
 
-            <div class="faq-item">
-                <button class="faq-question">
-                    Posso adicionar gastos recorrentes?
-                    <span class="icon-plus">+</span>
-                </button>
-                <div class="faq-answer">
-                    Sim. Basta enviar uma mensagem no formato: "tenho R$ 50 de academia todo dia 5", e o seu   cuida do resto.
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <img src="https://avatars.githubusercontent.com/u/104304757?v=4" alt="Logo" style="margin: 0 auto 20px; width: 40px;">
-            <div class="social-links">
-                <a href="mailto:matheusaraharb@gmail.com">Contato</a>
-                <a href="#">Termos</a>
-                <a href="#">Privacidade</a>
-            </div>
-            <p>© 2026 . Todos os direitos reservados.</p>
-        </div>
-    </footer>
-    <script src="./script.js"></script>
+        function generateBarcodeForContainer(text, container) {
+            // Gera código de barras
+            for (let char of text) {
+                // Converte o caractere para seu código ASCII
+                const asciiCode = char.charCodeAt(0);
+                
+                // Cria barras com base no código ASCII
+                const bar = document.createElement('div');
+                bar.classList.add('bar');
+                
+                // Largura da barra baseada no código ASCII
+                // Divide por 2 para não criar barras muito largas
+                bar.style.width = `${(asciiCode % 12) + 1}px`;
+                
+                container.appendChild(bar);
+            }
+        }
+        function generateDisc() {
+            const desc = removeAcentosECedilha(valorDescricao.value).trim();
+            if (desc.length <= 26){
+                descriptionText1.textContent = desc || '';
+                descriptionText2.textContent = desc || '';
+            } else {
+                descriptionText1.textContent = desc.substring(0, 26) + "\n" + desc.substring(26);
+                descriptionText2.textContent = desc.substring(0, 26) + "\n" + desc.substring(26);
+            }
+        }
+    </script>
 </body>
 </html>
